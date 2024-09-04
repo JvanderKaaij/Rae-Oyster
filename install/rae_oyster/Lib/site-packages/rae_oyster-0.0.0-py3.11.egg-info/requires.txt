@@ -1,0 +1,4 @@
+setuptools
+rclpy
+image_pipeline
+face_recognition

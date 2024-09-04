@@ -1,0 +1,16 @@
+package.xml
+setup.cfg
+setup.py
+../build/rae_oyster/rae_oyster.egg-info/PKG-INFO
+../build/rae_oyster/rae_oyster.egg-info/SOURCES.txt
+../build/rae_oyster/rae_oyster.egg-info/dependency_links.txt
+../build/rae_oyster/rae_oyster.egg-info/entry_points.txt
+../build/rae_oyster/rae_oyster.egg-info/requires.txt
+../build/rae_oyster/rae_oyster.egg-info/top_level.txt
+../build/rae_oyster/rae_oyster.egg-info/zip-safe
+rae_oyster/__init__.py
+rae_oyster/pearl_node.py
+resource/rae_oyster
+test/test_copyright.py
+test/test_flake8.py
+test/test_pep257.py

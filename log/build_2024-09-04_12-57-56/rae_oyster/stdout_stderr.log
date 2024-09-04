@@ -1,0 +1,28 @@
+C:\Users\Joey\miniforge3\envs\ros_env\Lib\site-packages\setuptools\_distutils\dist.py:268: UserWarning: Unknown distribution option: 'tests_require'
+  warnings.warn(msg)
+running egg_info
+writing ..\build\rae_oyster\rae_oyster.egg-info\PKG-INFO
+writing dependency_links to ..\build\rae_oyster\rae_oyster.egg-info\dependency_links.txt
+writing entry points to ..\build\rae_oyster\rae_oyster.egg-info\entry_points.txt
+writing requirements to ..\build\rae_oyster\rae_oyster.egg-info\requires.txt
+writing top-level names to ..\build\rae_oyster\rae_oyster.egg-info\top_level.txt
+reading manifest file '..\build\rae_oyster\rae_oyster.egg-info\SOURCES.txt'
+writing manifest file '..\build\rae_oyster\rae_oyster.egg-info\SOURCES.txt'
+running build
+running build_py
+copying rae_oyster\pearl_node.py -> D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\build\lib\rae_oyster
+copying rae_oyster\__init__.py -> D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\build\lib\rae_oyster
+running install
+running install_lib
+copying D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\build\lib\rae_oyster\pearl_node.py -> D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\Lib\site-packages\rae_oyster
+byte-compiling D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\Lib\site-packages\rae_oyster\pearl_node.py to pearl_node.cpython-311.pyc
+running install_data
+copying resource\rae_oyster -> D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\share\ament_index\resource_index\packages
+copying package.xml -> D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\share\rae_oyster
+running install_egg_info
+removing 'D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\Lib\site-packages\rae_oyster-0.0.0-py3.11.egg-info' (and everything under it)
+Copying ..\build\rae_oyster\rae_oyster.egg-info to D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\Lib\site-packages\rae_oyster-0.0.0-py3.11.egg-info
+running install_scripts
+Installing pearl_node-script.py script to D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\lib\rae_oyster
+Installing pearl_node.exe script to D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\lib\rae_oyster
+writing list of installed files to 'D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\install.log'

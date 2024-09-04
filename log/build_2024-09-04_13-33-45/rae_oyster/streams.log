@@ -1,0 +1,30 @@
+[1.703s] Invoking command in 'D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\rae_oyster': CONDA_PROMPT_MODIFIER=(ros_env) PYTHONPATH=D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\prefix_override;C:\Users\Joey\miniforge3\envs\ros_env\Lib\site-packages\colcon_core\task\python\colcon_distutils_commands;D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\Lib\site-packages;%PYTHONPATH% C:\Users\Joey\miniforge3\envs\ros_env\python.exe -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ..\build\rae_oyster build --build-base D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\build install --record D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\install.log --single-version-externally-managed install_data
+[2.094s] C:\Users\Joey\miniforge3\envs\ros_env\Lib\site-packages\setuptools\_distutils\dist.py:268: UserWarning: Unknown distribution option: 'tests_require'
+[2.094s]   warnings.warn(msg)
+[2.281s] running egg_info
+[2.297s] writing ..\build\rae_oyster\rae_oyster.egg-info\PKG-INFO
+[2.313s] writing dependency_links to ..\build\rae_oyster\rae_oyster.egg-info\dependency_links.txt
+[2.313s] writing entry points to ..\build\rae_oyster\rae_oyster.egg-info\entry_points.txt
+[2.313s] writing requirements to ..\build\rae_oyster\rae_oyster.egg-info\requires.txt
+[2.313s] writing top-level names to ..\build\rae_oyster\rae_oyster.egg-info\top_level.txt
+[2.359s] reading manifest file '..\build\rae_oyster\rae_oyster.egg-info\SOURCES.txt'
+[2.359s] writing manifest file '..\build\rae_oyster\rae_oyster.egg-info\SOURCES.txt'
+[2.359s] running build
+[2.359s] running build_py
+[2.359s] copying rae_oyster\pearl_node.py -> D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\build\lib\rae_oyster
+[2.359s] copying rae_oyster\__init__.py -> D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\build\lib\rae_oyster
+[2.359s] running install
+[2.359s] running install_lib
+[2.391s] copying D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\build\lib\rae_oyster\pearl_node.py -> D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\Lib\site-packages\rae_oyster
+[2.391s] byte-compiling D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\Lib\site-packages\rae_oyster\pearl_node.py to pearl_node.cpython-311.pyc
+[2.391s] running install_data
+[2.391s] copying resource\rae_oyster -> D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\share\ament_index\resource_index\packages
+[2.391s] copying package.xml -> D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\share\rae_oyster
+[2.391s] running install_egg_info
+[2.422s] removing 'D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\Lib\site-packages\rae_oyster-0.0.0-py3.11.egg-info' (and everything under it)
+[2.422s] Copying ..\build\rae_oyster\rae_oyster.egg-info to D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\Lib\site-packages\rae_oyster-0.0.0-py3.11.egg-info
+[2.438s] running install_scripts
+[2.641s] Installing pearl_node-script.py script to D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\lib\rae_oyster
+[2.641s] Installing pearl_node.exe script to D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\lib\rae_oyster
+[2.641s] writing list of installed files to 'D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\install.log'
+[2.688s] Invoked command in 'D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\rae_oyster' returned '0': CONDA_PROMPT_MODIFIER=(ros_env) PYTHONPATH=D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\prefix_override;C:\Users\Joey\miniforge3\envs\ros_env\Lib\site-packages\colcon_core\task\python\colcon_distutils_commands;D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\rae_oyster\Lib\site-packages;%PYTHONPATH% C:\Users\Joey\miniforge3\envs\ros_env\python.exe -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ..\build\rae_oyster build --build-base D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\build install --record D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\build\rae_oyster\install.log --single-version-externally-managed install_data

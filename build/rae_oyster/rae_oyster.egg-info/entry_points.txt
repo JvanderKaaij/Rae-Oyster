@@ -1,0 +1,2 @@
+[console_scripts]
+pearl_node = rae_oyster.pearl_node:main

@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Name: rae_oyster
+Version: 0.0.0
+Summary: TODO: Package description
+Maintainer: Joey
+Maintainer-email: j.g.vanderkaaij@uva.nl
+License: TODO: License declaration
+Requires-Dist: setuptools
+Requires-Dist: rclpy
+Requires-Dist: image_pipeline
+Requires-Dist: face_recognition

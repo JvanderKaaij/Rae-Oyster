@@ -1,0 +1,6 @@
+source;share\rae_oyster\hook\pythonpath.ps1
+source;share\rae_oyster\hook\pythonpath.bat
+source;share\rae_oyster\hook\pythonpath.dsv
+source;share\rae_oyster\hook\ament_prefix_path.ps1
+source;share\rae_oyster\hook\ament_prefix_path.bat
+source;share\rae_oyster\hook\ament_prefix_path.dsv
