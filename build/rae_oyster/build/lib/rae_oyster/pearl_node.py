@@ -7,6 +7,7 @@ from cv_bridge import CvBridge
 from PIL import Image as PILImage, ImageDraw
 from pathlib import Path
 
+
 class ImageProcessor(Node):
 
     def __init__(self):

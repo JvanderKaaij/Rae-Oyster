@@ -1,2 +1,3 @@
 [console_scripts]
+line_node = rae_oyster.line_node:main
 pearl_node = rae_oyster.pearl_node:main

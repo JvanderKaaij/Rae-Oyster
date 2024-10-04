@@ -19,7 +19,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'pearl_node = rae_oyster.pearl_node:main'
+            'pearl_node = rae_oyster.pearl_node:main',
+            'line_node = rae_oyster.line_node:main'
         ],
     },
 )
