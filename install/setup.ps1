@@ -24,7 +24,9 @@ function _colcon_prefix_chain_powershell_source_script {
 # source chained prefixes
 _colcon_prefix_chain_powershell_source_script "C:\Users\Joey\miniforge3\envs\ros_env\Library\local_setup.ps1"
 _colcon_prefix_chain_powershell_source_script "D:\UserProjects\Joey\Robotics\Rae\ros2-line-follower\install\local_setup.ps1"
+_colcon_prefix_chain_powershell_source_script "D:\UserProjects\Joey\Robotics\Rae\install\local_setup.ps1"
 _colcon_prefix_chain_powershell_source_script "D:\UserProjects\Joey\Robotics\Rae\ros2-line-follower\install\\local_setup.ps1"
+_colcon_prefix_chain_powershell_source_script "D:\UserProjects\Joey\Robotics\Rae\install\\local_setup.ps1"
 _colcon_prefix_chain_powershell_source_script "D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\\local_setup.ps1"
 
 # source this prefix

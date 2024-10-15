@@ -33,23 +33,23 @@ class ImageProcessor(Node):
 
 
     def image_callback(self, msg):
+        print('image received')
         np_arr = np.frombuffer(msg.data, np.uint8)
         # Convert ROS Compressed Image message to OpenCV2 format
         current_frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+        cv2.imshow('Binary Threshold Control', current_frame)
+        #
+        # at_detector = Detector(
+        #     families="tag36h11",
+        #     nthreads=1,
+        #     quad_decimate=1.0,
+        #     quad_sigma=0.0,
+        #     refine_edges=1,
+        #     decode_sharpening=0.25,
+        #     debug=0
+        # )
 
-        at_detector = Detector(
-            families="tag36h11",
-            nthreads=1,
-            quad_decimate=1.0,
-            quad_sigma=0.0,
-            refine_edges=1,
-            decode_sharpening=0.25,
-            debug=0
-        )
-
-        at_detector.detect(current_frame)
-
-        cv2.imshow('Binary Threshold Control', processed_frame)
+        # at_detector.detect(current_frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             # If 'q' is pressed, exit the loop and close the window
@@ -59,7 +59,7 @@ class ImageProcessor(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    print('lets go!')
+    print('lets go! openCV!')
     image_processor = ImageProcessor()
 
     try:

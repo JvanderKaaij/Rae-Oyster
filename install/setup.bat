@@ -8,7 +8,9 @@
 :: source chained prefixes
 call:_colcon_prefix_chain_bat_call_script "C:\Users\Joey\miniforge3\envs\ros_env\Library\local_setup.bat"
 call:_colcon_prefix_chain_bat_call_script "D:\UserProjects\Joey\Robotics\Rae\ros2-line-follower\install\local_setup.bat"
+call:_colcon_prefix_chain_bat_call_script "D:\UserProjects\Joey\Robotics\Rae\install\local_setup.bat"
 call:_colcon_prefix_chain_bat_call_script "D:\UserProjects\Joey\Robotics\Rae\ros2-line-follower\install\\local_setup.bat"
+call:_colcon_prefix_chain_bat_call_script "D:\UserProjects\Joey\Robotics\Rae\install\\local_setup.bat"
 call:_colcon_prefix_chain_bat_call_script "D:\UserProjects\Joey\Robotics\Rae\rae-ros-oyster\install\\local_setup.bat"
 
 :: source this prefix
