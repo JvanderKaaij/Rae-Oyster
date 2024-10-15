@@ -3,3 +3,4 @@ numpy
 rclpy
 cv-bridge
 Pillow
+pupil-apriltags

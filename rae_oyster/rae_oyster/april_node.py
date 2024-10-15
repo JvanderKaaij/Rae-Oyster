@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import rclpy
 import math
+from pupil_apriltags import Detector
 
 from rclpy.node import Node
 from sensor_msgs.msg import CompressedImage, Image, CameraInfo
