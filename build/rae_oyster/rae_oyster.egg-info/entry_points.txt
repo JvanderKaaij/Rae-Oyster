@@ -1,3 +1,4 @@
 [console_scripts]
+april_node = rae_oyster.april_node:main
 line_node = rae_oyster.line_node:main
 pearl_node = rae_oyster.pearl_node:main

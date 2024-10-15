@@ -1,6 +1,5 @@
 opencv-python
 numpy
-rclpy
 cv-bridge
 Pillow
 pupil-apriltags
