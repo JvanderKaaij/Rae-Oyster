@@ -20,7 +20,7 @@ class ImageProcessor(Node):
 
         self.should_exit = False  # Control flag for exiting
         self.tag_size = 1.0
-        self.camera_params = (600, 600, 4208/2, 3120/2)
+        self.camera_params = (6000, 6000, 4208/2, 3120/2)
 
         # Create a subscription to the camera topic
         self.publisher_image = self.create_publisher(Image, '/lcd', 10)
