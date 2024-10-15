@@ -9,6 +9,7 @@ setup.py
 ../build/rae_oyster/rae_oyster.egg-info/top_level.txt
 ../build/rae_oyster/rae_oyster.egg-info/zip-safe
 rae_oyster/__init__.py
+rae_oyster/april_node.py
 rae_oyster/line_node.py
 rae_oyster/pearl_node.py
 resource/rae_oyster
