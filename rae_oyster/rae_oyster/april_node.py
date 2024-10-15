@@ -18,6 +18,8 @@ class ImageProcessor(Node):
         super().__init__('image_processor')
         self.br = CvBridge()
 
+        self.should_exit = False  # Control flag for exiting
+
         # Create a subscription to the camera topic
         self.publisher_image = self.create_publisher(Image, '/lcd', 10)
 
