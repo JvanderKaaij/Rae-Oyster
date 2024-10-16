@@ -19,8 +19,16 @@ class ImageProcessor(Node):
         self.br = CvBridge()
 
         self.should_exit = False  # Control flag for exiting
-        self.tag_size = 1.0
-        self.camera_params = (6000, 6000, 4208/2, 3120/2)
+        self.tag_size = 0.1
+        self.camera_params = (284.659, 284.659, 320.594, 200.622)
+
+        self.camera_matrix = np.array([
+            [284.659, 0, 320.594],
+            [0, 284.659, 200.622],
+            [0, 0, 1]
+        ])
+
+        self.dist_coeffs = np.array([-5.7565, 17.2065, -0.0008, -0.0003, 4.1285, -5.4157, 15.1905, 10.3328])
 
         # Create a subscription to the camera topic
         self.publisher_image = self.create_publisher(Image, '/lcd', 10)
@@ -31,14 +39,31 @@ class ImageProcessor(Node):
             self.image_callback,
             10)
 
-        self.subscription  # prevent unused variable warning
+        # self.subscription_camera_info = self.create_subscription(
+        #     CameraInfo,
+        #     "/rae/right/camera_info",  # The topic you are subscribing to
+        #     self.camera_info_callback,
+        #     10)
+
+
+    def camera_info_callback(self, data):
+        # This function will be called whenever a new message is received on /rae/right/camera_info
+        print("Received camera info:")
+        print(f"Width: {data.width}, Height: {data.height}")
+        print(f"Distortion Model: {data.distortion_model}")
+        print(f"Camera Matrix (K): {data.k}")
+        # print(f"Distortion Coefficients: {data.D}")
 
 
     def image_callback(self, msg):
         np_arr = np.frombuffer(msg.data, np.uint8)
         # Convert ROS Compressed Image message to OpenCV2 format
         color_frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-        gray_frame = cv2.cvtColor(color_frame, cv2.COLOR_BGR2GRAY)
+
+        # Undistort the image
+        undistorted_img = cv2.undistort(color_frame, self.camera_matrix, self.dist_coeffs)
+
+        gray_frame = cv2.cvtColor(undistorted_img, cv2.COLOR_BGR2GRAY)
 
         at_detector = Detector(
             families="tag36h11",
@@ -53,14 +78,14 @@ class ImageProcessor(Node):
         tags = at_detector.detect(gray_frame, True, camera_params=self.camera_params, tag_size=self.tag_size)
 
         for tag in tags:
-            print(tag.tag_id)
-            self._draw_pose(color_frame,
+            # print(tag.tag_id)
+            self._draw_pose(undistorted_img,
                             self.camera_params,
                             tag.pose_R,
                             tag.pose_t)
             self.triangulate(tag.pose_t)
 
-        cv2.imshow('April Tags', color_frame)
+        cv2.imshow('April Tags', undistorted_img)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             # If 'q' is pressed, exit the loop and close the window
