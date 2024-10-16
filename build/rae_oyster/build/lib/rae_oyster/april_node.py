@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import rclpy
 import math
-from pupil_apriltags import Detector
+from pyapriltags import Detector
 
 from rclpy.node import Node
 from sensor_msgs.msg import CompressedImage, Image, CameraInfo
@@ -58,14 +58,19 @@ class ImageProcessor(Node):
                             self.camera_params,
                             tag.pose_R,
                             tag.pose_t)
+            self.triangulate(tag.pose_t)
 
         cv2.imshow('April Tags', color_frame)
-
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             # If 'q' is pressed, exit the loop and close the window
             cv2.destroyAllWindows()
             self.should_exit = True  # Set the exit flag
+
+
+    def triangulate(self, transform):
+        t_x, t_y, t_z = transform
+        print(t_z)
 
 
     def _draw_pose(self, overlay, cam_params, pose_r, pose_t):
