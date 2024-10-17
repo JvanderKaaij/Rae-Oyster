@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 import rclpy
 import math
-from pyapriltags import Detector
 
+from pyapriltags import Detector
 from rclpy.node import Node
 from sensor_msgs.msg import CompressedImage, Image, CameraInfo
 from geometry_msgs.msg import Twist
@@ -11,15 +11,33 @@ from cv_bridge import CvBridge
 from PIL import Image as PILImage, ImageDraw
 from pathlib import Path
 
+class AprilTag:
+    def __init__(self, id, x, y, z):
+        self.id = id
+        self.x = x
+        self.y = y
+        self.z = z
+        self.d = 0
+
 
 class ImageProcessor(Node):
 
     def __init__(self):
         super().__init__('image_processor')
+
+        self.tags = (
+            AprilTag(1, -2.6, 0.2, 1),
+            AprilTag(2, -0.05, 0.08, 2.35)
+        )
+
+
         self.br = CvBridge()
 
+        fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        self.out = cv2.VideoWriter('april_output.avi', fourcc, 20.0, (640, 400))
+
         self.should_exit = False  # Control flag for exiting
-        self.tag_size = 0.1
+        self.tag_size = 0.08
         self.camera_params = (284.659, 284.659, 320.594, 200.622)
 
         self.camera_matrix = np.array([
@@ -45,6 +63,9 @@ class ImageProcessor(Node):
         #     self.camera_info_callback,
         #     10)
 
+    def shutdown(self):
+        print('shutting down video out')
+        self.out.release()
 
     def camera_info_callback(self, data):
         # This function will be called whenever a new message is received on /rae/right/camera_info
@@ -77,25 +98,88 @@ class ImageProcessor(Node):
 
         tags = at_detector.detect(gray_frame, True, camera_params=self.camera_params, tag_size=self.tag_size)
 
-        for tag in tags:
-            # print(tag.tag_id)
-            self._draw_pose(undistorted_img,
-                            self.camera_params,
-                            tag.pose_R,
-                            tag.pose_t)
-            self.triangulate(tag.pose_t)
+        matches = self._handle_tags(tags, undistorted_img)
+
+        if len(matches) >= 2:
+            self._triangulate(matches[0], matches[1])
+
+        self.out.write(undistorted_img)
 
         cv2.imshow('April Tags', undistorted_img)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             # If 'q' is pressed, exit the loop and close the window
             cv2.destroyAllWindows()
+            self.out.release()
             self.should_exit = True  # Set the exit flag
 
+    def _handle_tags(self, tags, undistorted_img):
+        matches = []
+        for tag in tags:
+            match = self._handle_tag(tag)
+            if match:
+                match.d = np.linalg.norm(tag.pose_t)
+                print(f'tag: {tag.tag_id} distance: {match.d}')
+                matches.append(match)
 
-    def triangulate(self, transform):
-        t_x, t_y, t_z = transform
-        print(t_z)
+            self._draw_pose(undistorted_img,
+                            self.camera_params,
+                            tag.pose_R,
+                            tag.pose_t)
+        return matches
+    def _handle_tag(self, tag):
+        match_tag = next((x for x in self.tags if x.id == tag.tag_id), None)
+        if match_tag:
+            return match_tag
+        return None
+
+    def _invert_pose(self, R, t):
+        # Invert the rotation
+        R_inv = R.T
+        # Invert the translation
+        t_inv = -np.dot(R_inv, t)
+        return R_inv, t_inv
+
+    def _triangulate(self, tag_one, tag_two):
+        print("triangulating")
+        x1 = tag_one.x
+        x2 = tag_two.x
+        y1 = tag_one.z
+        y2 = tag_two.z
+        d_A = tag_one.d
+        d_B = tag_two.d
+
+        print(f"Distance A {d_A}")
+        print(f"Distance B {d_B}")
+
+        a = x2 - x1
+        b = y2 - y1
+        c = (d_A**2 - d_B**2 - x1**2 + x2**2 - y1**2 + y2**2) / 2
+
+        A = 1 + (a / b) ** 2
+        B = -2 * x1 + 2 * (a / b) * (c / b - y1)
+        C = x1 ** 2 + (c / b - y1) ** 2 - d_A ** 2
+
+        discriminant = B ** 2 - 4 * A * C
+
+        if discriminant < 0:
+            print("No real solution, the circles do not intersect.")
+        else:
+            # There may be two solutions, we take both
+            x_sol1 = (-B + math.sqrt(discriminant)) / (2 * A)
+            x_sol2 = (-B - math.sqrt(discriminant)) / (2 * A)
+
+            # Calculate corresponding y values
+            y_sol1 = (c - a * x_sol1) / b
+            y_sol2 = (c - a * x_sol2) / b
+
+            print("Possible positions for point C:")
+            print(f"Solution 1: ({x_sol1}, {y_sol1})")
+            print(f"Solution 2: ({x_sol2}, {y_sol2})")
+
+    def _triangulate_old(self, transform, rotation):
+        R_cam_to_tag, t_cam_to_tag = self._invert_pose(rotation, transform)
+        return R_cam_to_tag, t_cam_to_tag
 
 
     def _draw_pose(self, overlay, cam_params, pose_r, pose_t):
@@ -151,6 +235,7 @@ def main(args=None):
     finally:
         print('doing shutdown')
         # Shutdown and cleanup
+        image_processor.shutdown()
         image_processor.destroy_node()
         rclpy.shutdown()
 
