@@ -10,6 +10,7 @@ from geometry_msgs.msg import Twist
 from cv_bridge import CvBridge
 from PIL import Image as PILImage, ImageDraw
 from pathlib import Path
+from sympy import symbols, Eq, solve
 
 class AprilTag:
     def __init__(self, id, x, y, z):
@@ -26,13 +27,24 @@ class ImageProcessor(Node):
         super().__init__('image_processor')
 
         self.tags = (
-            AprilTag(0, -2, 0, 0),
-            AprilTag(1, 0, 0.17, 1.5),
-            AprilTag(2, -2, 0, 2),
-            AprilTag(3, 1.5, 0, 2),
-            AprilTag(4, 1.5, 0, 0)
+            AprilTag(0, -2.0, 0.0, 0.0),
+            AprilTag(1, 0.0, 0.17, 1.5),
+            AprilTag(2, -2.0, 0.0, 2.0),
+            AprilTag(3, 1.5, 0.11, 2.0),
+            AprilTag(4, 1.5, 0.0, 0.0)
         )
 
+        # self.tags = (
+        #     AprilTag(0, 0, 0, 1.5),
+        #     AprilTag(4, 1.5, 0, 2)
+        # )
+
+        field_rect = ((-2, 2), (2, 2), (2, -2), (-2, -2))
+
+        self.field_min_x = min(point[0] for point in field_rect)
+        self.field_max_x = max(point[0] for point in field_rect)
+        self.field_min_y = min(point[1] for point in field_rect)
+        self.field_max_y = max(point[1] for point in field_rect)
 
         self.br = CvBridge()
 
@@ -101,10 +113,16 @@ class ImageProcessor(Node):
 
         tags = at_detector.detect(gray_frame, True, camera_params=self.camera_params, tag_size=self.tag_size)
 
+        robot_position = None
+
         matches = self._handle_tags(tags, undistorted_img)
 
         if len(matches) >= 2:
-            self._triangulate(matches[0], matches[1])
+            robot_position = self._triangulate(matches[0], matches[1])
+
+
+        if robot_position:
+            cv2.putText(undistorted_img, f'rae pos X: {robot_position[0]:.1f}, Y: {robot_position[1]:.1f}', (100, 100) ,cv2.FONT_HERSHEY_SIMPLEX, .5, (0, 0, 255), 1, cv2.LINE_AA)
 
         self.out.write(undistorted_img)
 
@@ -150,33 +168,22 @@ class ImageProcessor(Node):
         x2 = tag_two.x
         y1 = tag_one.z
         y2 = tag_two.z
-        d_A = tag_one.d
-        d_B = tag_two.d
+        d1 = tag_one.d
+        d2 = tag_two.d
 
-        a = x2 - x1
-        b = y2 - y1
-        c = (d_A**2 - d_B**2 - x1**2 + x2**2 - y1**2 + y2**2) / 2
+        x, y = symbols('x y')
+        eq1 = Eq((x - x1) ** 2 + (y - y1) ** 2, d1 ** 2)
+        eq2 = Eq((x - x2) ** 2 + (y - y2) ** 2, d2 ** 2)
 
-        A = 1 + (a / b) ** 2
-        B = -2 * x1 + 2 * (a / b) * (c / b - y1)
-        C = x1 ** 2 + (c / b - y1) ** 2 - d_A ** 2
+        solution = solve((eq1, eq2), (x, y))
+        sol1 = self._aabb(solution[0])
+        sol2 = self._aabb(solution[1])
 
-        discriminant = B ** 2 - 4 * A * C
-
-        if discriminant < 0:
-            print("No real solution, the circles do not intersect.")
-        else:
-            # There may be two solutions, we take both
-            x_sol1 = (-B + math.sqrt(discriminant)) / (2 * A)
-            x_sol2 = (-B - math.sqrt(discriminant)) / (2 * A)
-
-            # Calculate corresponding y values
-            y_sol1 = (c - a * x_sol1) / b
-            y_sol2 = (c - a * x_sol2) / b
-
-            print("Possible positions for point C:")
-            print(f"Solution 1: ({x_sol1}, {y_sol1})")
-            print(f"Solution 2: ({x_sol2}, {y_sol2})")
+        if sol1:
+            return solution[0]
+        elif sol2:
+            return solution[1]
+        print("Something went wrong, no solution found")
 
     def _triangulate_old(self, transform, rotation):
         R_cam_to_tag, t_cam_to_tag = self._invert_pose(rotation, transform)
@@ -224,6 +231,13 @@ class ImageProcessor(Node):
 
         for i, j in edges:
             cv2.line(overlay, ipoints[i], ipoints[j], (0, 255, 0), 1, 16)
+
+    def _aabb(self, coord):
+        px = coord[0]
+        py = coord[1]
+        if self.field_min_x <= px <= self.field_max_x and self.field_min_y <= py <= self.field_max_y:
+            return True
+        return False
 
 def main(args=None):
     rclpy.init(args=args)
