@@ -26,19 +26,13 @@ class ImageProcessor(Node):
         super().__init__('image_processor')
 
         self.tags = (
-            AprilTag(0, 0,0.12,1.75),
-            AprilTag(1, -1.5,0.12,1.5),
-            AprilTag(2, -2, 0.12, 0),
-            AprilTag(4, 1.5, 0.12, 2),
-            AprilTag(5, 0, 0.12, 2.5)
+            AprilTag(0, -2, 0, 0),
+            AprilTag(1, 0, 0.17, 1.5),
+            AprilTag(2, -2, 0, 2),
+            AprilTag(3, 1.5, 0, 2),
+            AprilTag(4, 1.5, 0, 0)
         )
 
-        field_rect = ((-2,2),(2,2),(2,-2),(-2,-2))
-
-        self.field_min_x = min(point[0] for point in field_rect)
-        self.field_max_x = max(point[0] for point in field_rect)
-        self.field_min_y = min(point[1] for point in field_rect)
-        self.field_max_y = max(point[1] for point in field_rect)
 
         self.br = CvBridge()
 
@@ -46,7 +40,7 @@ class ImageProcessor(Node):
         self.out = cv2.VideoWriter('april_output.avi', fourcc, 20.0, (640, 400))
 
         self.should_exit = False  # Control flag for exiting
-        self.tag_size = 0.153
+        self.tag_size = 0.08
         self.camera_params = (284.659, 284.659, 320.594, 200.622)
 
         self.camera_matrix = np.array([
@@ -109,13 +103,8 @@ class ImageProcessor(Node):
 
         matches = self._handle_tags(tags, undistorted_img)
 
-        position = None
-
         if len(matches) >= 2:
-            position = self._triangulate(matches[0], matches[1])
-
-        if position:
-            cv2.putText(undistorted_img, f'rae pos X: {position[0]:.2f}, Y: {position[1]:.2f}', (100, 100) ,cv2.FONT_HERSHEY_SIMPLEX, .5, (0, 0, 255), 1, cv2.LINE_AA)
+            self._triangulate(matches[0], matches[1])
 
         self.out.write(undistorted_img)
 
@@ -129,8 +118,10 @@ class ImageProcessor(Node):
 
     def _handle_tags(self, tags, undistorted_img):
         matches = []
+        print(f"encountered {len(tags)} tags:")
         for tag in tags:
             match = self._handle_tag(tag)
+            print(f"encountered tag {tag.tag_id}")
             if match:
                 match.d = np.linalg.norm(tag.pose_t)
                 print(f'tag: {tag.tag_id} distance: {match.d}')
@@ -154,19 +145,7 @@ class ImageProcessor(Node):
         t_inv = -np.dot(R_inv, t)
         return R_inv, t_inv
 
-
     def _triangulate(self, tag_one, tag_two):
-        sol1, sol2 = self._triangulate_circles(tag_one, tag_two)
-        if sol1 or sol2:
-            if self._aabb(sol1):
-                # print(f'solution 1 is within BB: {sol1}')
-                return sol1
-            if self._aabb(sol2):
-                # print(f'solution 2 is within BB {sol2}')
-                return sol2
-
-
-    def _triangulate_circles(self, tag_one, tag_two):
         x1 = tag_one.x
         x2 = tag_two.x
         y1 = tag_one.z
@@ -195,17 +174,10 @@ class ImageProcessor(Node):
             y_sol1 = (c - a * x_sol1) / b
             y_sol2 = (c - a * x_sol2) / b
 
-            sol1 = (x_sol1, y_sol1)
-            sol2 = (x_sol2, y_sol2)
+            print("Possible positions for point C:")
+            print(f"Solution 1: ({x_sol1}, {y_sol1})")
+            print(f"Solution 2: ({x_sol2}, {y_sol2})")
 
-            return sol1, sol2
-
-    def _aabb(self, coord):
-        px = coord[0]
-        py = coord[1]
-        if self.field_min_x <= px <= self.field_max_x and self.field_min_y <= py <= self.field_max_y:
-            return True
-        return False
     def _triangulate_old(self, transform, rotation):
         R_cam_to_tag, t_cam_to_tag = self._invert_pose(rotation, transform)
         return R_cam_to_tag, t_cam_to_tag
@@ -251,7 +223,7 @@ class ImageProcessor(Node):
         ipoints = [tuple(pt) for pt in ipoints.reshape(-1, 2)]
 
         for i, j in edges:
-            cv2.line(overlay, ipoints[i], ipoints[j], (0, 255, 0), 2, 16)
+            cv2.line(overlay, ipoints[i], ipoints[j], (0, 255, 0), 1, 16)
 
 def main(args=None):
     rclpy.init(args=args)

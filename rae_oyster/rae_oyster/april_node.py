@@ -26,8 +26,11 @@ class ImageProcessor(Node):
         super().__init__('image_processor')
 
         self.tags = (
-            AprilTag(1, -2.6, 0.2, 1),
-            AprilTag(2, -0.05, 0.08, 2.35)
+            AprilTag(0, -2, 0, 0),
+            AprilTag(1, 0, 0.17, 1.5),
+            AprilTag(2, -2, 0, 2),
+            AprilTag(3, 1.5, 0, 2),
+            AprilTag(4, 1.5, 0, 0)
         )
 
 
@@ -115,8 +118,10 @@ class ImageProcessor(Node):
 
     def _handle_tags(self, tags, undistorted_img):
         matches = []
+        print(f"encountered {len(tags)} tags:")
         for tag in tags:
             match = self._handle_tag(tag)
+            print(f"encountered tag {tag.tag_id}")
             if match:
                 match.d = np.linalg.norm(tag.pose_t)
                 print(f'tag: {tag.tag_id} distance: {match.d}')
@@ -141,16 +146,12 @@ class ImageProcessor(Node):
         return R_inv, t_inv
 
     def _triangulate(self, tag_one, tag_two):
-        print("triangulating")
         x1 = tag_one.x
         x2 = tag_two.x
         y1 = tag_one.z
         y2 = tag_two.z
         d_A = tag_one.d
         d_B = tag_two.d
-
-        print(f"Distance A {d_A}")
-        print(f"Distance B {d_B}")
 
         a = x2 - x1
         b = y2 - y1
@@ -222,7 +223,7 @@ class ImageProcessor(Node):
         ipoints = [tuple(pt) for pt in ipoints.reshape(-1, 2)]
 
         for i, j in edges:
-            cv2.line(overlay, ipoints[i], ipoints[j], (0, 255, 0), 2, 16)
+            cv2.line(overlay, ipoints[i], ipoints[j], (0, 255, 0), 1, 16)
 
 def main(args=None):
     rclpy.init(args=args)
