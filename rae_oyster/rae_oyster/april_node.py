@@ -27,17 +27,9 @@ class ImageProcessor(Node):
         super().__init__('image_processor')
 
         self.tags = (
-            AprilTag(0, -2.0, 0.0, 0.0),
-            AprilTag(1, 0.0, 0.17, 1.5),
-            AprilTag(2, -2.0, 0.0, 2.0),
-            AprilTag(3, 1.5, 0.11, 2.0),
-            AprilTag(4, 1.5, 0.0, 0.0)
+            AprilTag(0, 0, 0, 1.5),
+            AprilTag(4, 1.5, 0, 2)
         )
-
-        # self.tags = (
-        #     AprilTag(0, 0, 0, 1.5),
-        #     AprilTag(4, 1.5, 0, 2)
-        # )
 
         field_rect = ((-2, 2), (2, 2), (2, -2), (-2, -2))
 
@@ -52,7 +44,7 @@ class ImageProcessor(Node):
         self.out = cv2.VideoWriter('april_output.avi', fourcc, 20.0, (640, 400))
 
         self.should_exit = False  # Control flag for exiting
-        self.tag_size = 0.08
+        self.tag_size = 0.16
         self.camera_params = (284.659, 284.659, 320.594, 200.622)
 
         self.camera_matrix = np.array([
