@@ -1,0 +1,12 @@
+[Unit] 
+Description=Custom WPA supplicant service
+After=network.target 
+
+[Service] 
+ExecStart=/usr/sbin/wpa_supplicant -i wlp1s0 -c /etc/wpa_supplicant.conf
+ExecReload=/bin/kill -HUP $MAINPID 
+Restart=on-failure
+Type=forking
+
+[Install] 
+WantedBy=multi-user.target

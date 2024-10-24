@@ -1,4 +1,6 @@
-/.idea/
+*/.idea/
+batch-config/.history/**
+batch-config/luxonisos-1.14-rae.zip
 log/
 install/
 *.mp4
